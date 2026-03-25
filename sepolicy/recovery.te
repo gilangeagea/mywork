@@ -1,0 +1,2 @@
+allow recovery rootfs:file { entrypoint execute };
+allow update_engine rootfs:file entrypoint;
