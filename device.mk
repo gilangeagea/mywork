@@ -50,11 +50,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_USE_DYNAMIC_PARTITIONS := true
 PRODUCT_BUILD_SUPER_PARTITION := true
 
-# Crypto
-PRODUCT_ENFORCE_VINTF_MANIFEST :=
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.crypto.volume.filenames_mode=aes-256-cts
-
 # API
 PRODUCT_SHIPPING_API_LEVEL := 30
 BOARD_VNDK_VERSION := current
@@ -82,10 +77,6 @@ PRODUCT_PACKAGES += \
     mtk_plpath_utils \
     mtk_plpath_utils.recovery
 
-# Keymaster
-PRODUCT_PACKAGES += \
-    android.hardware.keymaster@4.0
-
 # Update engine
 PRODUCT_PACKAGES += \
     update_engine \
@@ -97,13 +88,9 @@ PRODUCT_PACKAGES_DEBUG += \
 
 # Additional Configs
 TARGET_RECOVERY_DEVICE_MODULES += \
-    android.hardware.keymaster@4.0 \
     libkeymaster4 \
-    libpuresoftkeymasterdevice \
-    libhardware_legacy
+    libpuresoftkeymasterdevice
 
 RECOVERY_LIBRARY_SOURCE_FILES += \
-    $(TARGET_OUT_SHARED_LIBRARIES)/android.hardware.keymaster@4.0 \
     $(TARGET_OUT_SHARED_LIBRARIES)/libkeymaster4.so \
-    $(TARGET_OUT_SHARED_LIBRARIES)/libpuresoftkeymasterdevice.so \
-    $(TARGET_OUT_SHARED_LIBRARIES)/libhardware_legacy.so
+    $(TARGET_OUT_SHARED_LIBRARIES)/libpuresoftkeymasterdevice.so
