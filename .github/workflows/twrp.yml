@@ -14,11 +14,11 @@ on:
       DEVICE_TREE:
         description: 'Custom Recovery Tree URL'
         required: true
-        default: 'https://github.com/excaliburXD/twrp_device_infinix_X695C.git'
+        default: 'https://github.com/gilangeagea/mywork.git'
       DEVICE_TREE_BRANCH:
         description: 'Device Tree Branch'
         required: true
-        default: 'twrp-11.0'
+        default: 'prebuilt'
       DEVICE_PATH:
         description: 'Device Path (e.g., device/xiaomi/sweet)'
         required: true
@@ -94,6 +94,12 @@ jobs:
           distribution: 'zulu'
           java-version: '11'
 
+      - name: Setup CCache
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+         key: fox-${{ github.event.inputs.DEVICE_NAME }}
+         max-size: 15G
+        
       - name: Install Git Repo Tool
         run: |
           mkdir ~/bin
@@ -121,6 +127,31 @@ jobs:
           cd android-recovery
           repo sync -c -j$(nproc --all) --current-branch --force-sync --no-tags --no-clone-bundle --optimized-fetch --prune
 
+      - name: Copy local manifest
+        run: |
+         cd ${GITHUB_WORKSPACE}/android-recovery
+         mkdir -p .repo/local_manifests
+         cp ${{ github.workspace }}/.github/local_manifests/*.xml .repo/local_manifests/
+         echo "=== local_manifests/ contents ==="
+         ls -la .repo/local_manifests/
+         for f in .repo/local_manifests/*.xml; do
+          echo "--- $f ---"
+          cat "$f"
+         done
+
+      - name: Re-sync projects to apply local manifest
+        run: |
+         cd ${GITHUB_WORKSPACE}/android-recovery
+         repo sync -c --force-sync -j$(nproc --all) vendor/twrp
+         echo "=== verify vendor/twrp is the fork ==="
+         cd vendor/twrp
+         git remote -v
+         git log --oneline -3
+         echo "--- BoardConfigTWRP.mk ---"
+         echo "--- BoardConfigSoong.mk ---"
+         cat config/BoardConfigTWRP.mk
+         cat config/BoardConfigSoong.mk
+        
       - name: Clone Device Tree
         run: |
           cd android-recovery
@@ -172,7 +203,7 @@ jobs:
             **Build:** ${{ inputs.MANIFEST_BRANCH }}
             **Device:** ${{ inputs.DEVICE_NAME }}
             **Maintainer:** @${{ github.actor }}
-            **Status:** Booted and tested   
+            **Status:** BETA 
 
       - name: Cleanup after build
         run: |
