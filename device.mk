@@ -56,12 +56,17 @@ BOARD_VNDK_VERSION := current
 
 # Boot control HAL
 PRODUCT_PACKAGES += \
-    android.hardware.boot@1.0-impl \
-    android.hardware.boot@1.0-service
+    android.hardware.boot@1.1-mtkimpl \
+    android.hardware.boot@1.1-mtkimpl.recovery \
+    android.hardware.boot@1.1-mtkimpl-service
+
+PRODUCT_PACKAGES_DEBUG += \
+    bootctl
 
 PRODUCT_PACKAGES += \
-    bootctrl.mt6785
-
+    bootctrl.mt6785 \
+    bootctrl.mt6785.recovery
+    
 # Health HAL
 PRODUCT_PACKAGES += \
     android.hardware.health@2.1-impl \
