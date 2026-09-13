@@ -1,5 +1,5 @@
 # For MTK DRM integration:
-service teei_daemon /vendor/bin/teei_daemon \
+service teei_daemon /vendor/bin/teei_daemon
     user root
     group root
     disabled
