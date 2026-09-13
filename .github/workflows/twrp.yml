@@ -183,6 +183,8 @@ jobs:
           cd android-recovery
           source build/envsetup.sh
           export ALLOW_MISSING_DEPENDENCIES=true
+          export CCACHE_EXEC=$(which ccache)
+          export USE_CCACHE=1
           lunch ${{ env.DEVICE_MAKEFILE }}-${{ github.event.inputs.BUILD_TYPE }}
           make clean
           make ${{ github.event.inputs.BUILD_TARGET }}image -j$(nproc --all)
